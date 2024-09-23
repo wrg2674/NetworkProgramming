@@ -1,0 +1,11 @@
+package defaultPackage;
+
+public class JFrameTest {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		JBasicFrame1 f = new JBasicFrame1();
+		frame.setVisible(true);
+	}
+
+}

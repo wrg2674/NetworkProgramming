@@ -1,0 +1,38 @@
+package defaultPackage;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class HelloEx {
+	private JFrame frame;
+	
+	public HelloEx() {
+		frame = new JFrame("HelloEx");
+		buildGUI();
+		frame.setSize(200,80);
+		frame.setLocation(500,300);
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+	private void buildGUI() {
+		JTextField text=new JTextField(10);
+		JButton button = new JButton("확인");
+		
+		JLabel label = new JLabel("Hello World");
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panel.add(text);
+		panel.add(button);
+		panel.setBackground(Color.ORANGE);
+		
+		frame.add(panel, BorderLayout.CENTER);
+		frame.add(label, BorderLayout.SOUTH);
+	}
+}

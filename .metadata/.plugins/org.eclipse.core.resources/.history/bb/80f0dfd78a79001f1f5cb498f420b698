@@ -1,0 +1,43 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class IntServer {
+	int port;
+
+	public IntServer(int port) {
+		this.port = port;
+	}
+
+	public void startServer() {
+		Socket clientSocket = null;
+		ServerSocket serverSocket = /* 서버 소켓 생성 */;
+		System.out.println("서버가 시작되었습니다.");
+
+		while (true) {
+			clientSocket = /* 접속 요청한 클라이언트 소켓 생성 */;
+			System.out.println("클라이언트가 연결되었습니다.");
+
+			showMessages(clientSocket);
+		}
+	}
+
+	private void showMessages(Socket cs) {
+			InputStream in = /* 클라이언트 소켓에서 입력 스트림 생성 */;
+
+			int message;
+			while ((message = /* 입력 스트림으로부터 읽기 */) != 0) {
+				System.out.println("클라이언트 메시지: " + message);
+			}
+
+			System.out.println("클라이언트가 연결을 종료했습니다.");
+	}
+
+	public static void main(String[] args) {
+		int port = 54321;
+
+		IntServer server = new IntServer(port);
+		server.startServer();
+	}
+}

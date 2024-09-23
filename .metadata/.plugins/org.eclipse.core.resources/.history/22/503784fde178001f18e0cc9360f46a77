@@ -1,0 +1,33 @@
+package defaultPackage;
+
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class JBasicFrame1 {
+	private JFrame frame;
+	public JBasicFrame1() {
+		frame = new JFrame("Frame Test1");
+		//frame.setTitle("Frame Test1");
+		
+		/*
+		 * frame.setSize(200,300); 
+		 * frame.setLocation(100,200);
+		 */
+		buildGUI();
+		frame.setBounds(100,200,200,300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+	private void buildGUI() {
+		frame.setLayout(new BorderLayout());
+		
+		JButton btn;
+		for(int i=0; i < 5; i++) {
+			btn = new JButton(""+(i+1));
+			//btn.setBounds(0,40*i, 100,30);
+			frame.add(btn);
+		}
+	}
+}

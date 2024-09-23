@@ -1,0 +1,78 @@
+package defaultPackage;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class GetHttpTest {
+
+	public static void main(String[] args) {
+		InetAddress host = null;
+		Socket cSocket = null;
+
+		BufferedReader in = null;
+		BufferedWriter out = null;
+
+		try {
+			// 클라이언트 소켓 생성
+			host = InetAddress.getByName("sarammani.com");
+			//Socket 생성자
+			//첫번째 매개변수 : 접속하려는 서버의 주소(InetAddress)
+			//두번째 매개변수 : 접속하려는 포트번호
+			cSocket = new Socket(host, 80);
+
+			// 네트워크 입출력 스트림 생성
+			//InputStream, OutputStream은 byteStream 객체이고,
+			//BufferedReader는 StringStream이기 때문에 byteStream을 StringStream으로 변환시켜줘야한다.
+			//이 작업을 InputStreamReader, OutputStreamWriter가 한다.
+			//IOException 처리 필수
+			in = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(cSocket.getOutputStream()));
+
+			// 웹서버에 요청 전송
+			/* */
+			//IOException 처리 필수
+			out.write("Get /a.html HTTP/1.1\r\n");
+			out.write("Host: sarammani.com\r\n");
+			out.write("\r\n");
+			out.flush();
+			// 웹서버로부터 응답 수신
+			while (true) {
+				String line = in.readLine();
+				if (line == null) break;
+
+				System.out.println(line);
+			}
+		}
+		//InetAddress는 UnknownHostException을 일으킬 수 있어서 이에 대한 예외처리가 필수적임
+		catch (UnknownHostException e) {
+			System.err.println("유효하지 않은 사이트입니다: " + e.getMessage());
+			System.exit(-1);
+		}
+		// Socket은 IOException을 일으킬 수 있어서 이에 대한 예외처리가 필수적임
+		catch (IOException e) {
+			System.err.println("연결 오류: " + e.getMessage());
+			System.exit(-1);
+		}
+		finally {
+			// 스트림 및 소켓 종료
+			try {
+				//열은 순서와 반대 순서로 닫아야함 
+				if (out != null) out.close();
+				if (in != null) in.close();
+				if (cSocket != null) cSocket.close();
+			}
+			catch (IOException e) {
+				System.err.println("연결 종료 실패: " + e.getMessage());
+				System.exit(-1);
+			}
+		}
+
+	}
+
+}

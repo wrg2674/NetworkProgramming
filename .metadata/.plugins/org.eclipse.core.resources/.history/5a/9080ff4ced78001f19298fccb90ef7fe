@@ -1,0 +1,18 @@
+package defaultPackage;
+
+import javax.swing.JFrame;
+
+public class HWFrameServer {
+	JFrame frame;
+	public HWFrameServer() {
+		frame = new JFrame("Frame");
+
+		buildGUI();
+		frame.setBounds(100, 200, 200, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+	private void buildGUI() {
+		
+	}
+}

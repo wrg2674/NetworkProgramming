@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 3 elements to &apos;Week4/src/defaultPackage&apos;&#x0D;&#x0A;- Original project: &apos;Week3_HW&apos;&#x0D;&#x0A;- Destination element: &apos;Week4/src/defaultPackage&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     defaultPackage.HWFrameServer.java&#x0D;&#x0A;     defaultPackage.HWFrameClient.java&#x0D;&#x0A;     defaultPackage.Main.java" description="Copy compilation units" destination="=Week4/src&lt;defaultPackage" element1="/src&lt;defaultPackage{HWFrameServer.java" element2="/src&lt;defaultPackage{HWFrameClient.java" element3="/src&lt;defaultPackage{Main.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1727099103671" units="3" version="1.0"/>
+</session>

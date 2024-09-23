@@ -1,0 +1,77 @@
+package defaultPackage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class IntClient {
+	private String serverAddress;
+	private int serverPort;
+
+	private OutputStream out;
+
+	public IntClient(String serverAddress, int serverPort) {
+		this.serverAddress = serverAddress;
+		this.serverPort = serverPort;
+
+		connectToServer();
+	}
+
+	private void connectToServer() {
+		try {
+			//소켓 생성자
+			//첫번째 매개변수 : 접속하고자 하는 서버의 도메인 이름(string)
+			//두번째 매개변수 : 접속하고자 하는 서버의 포트번호 (int)
+			//IOException 처리 필수
+			Socket socket = new Socket(serverAddress, serverPort);
+			//IOException 처리 필수
+			out = socket.getOutputStream();
+		}catch(IOException e) {
+			System.err.println("클라이언트 접속 오류> "+e.getMessage());
+			System.exit(-1);
+		}
+			
+	}
+
+	private void sendMessage(int msg) {
+			try {
+				//IOException 처리 필수
+				out.write(msg);
+			} catch (IOException e) {
+				System.err.println("클라이언트 쓰기 오류> "+e.getMessage());
+				System.exit(-1);
+			}
+
+			if (msg == 0) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					System.err.println("클라이언트 닫기 오류> "+e.getMessage());
+					System.exit(-1);
+				}
+
+				System.exit(0);
+			}
+
+			System.out.println("나: " + msg);
+	}
+
+	public void start() {
+		Scanner scanner = new Scanner(System.in);
+
+		while (true) {
+			System.out.print("데이터를 입력하세요 (종료: '0'): ");
+			int message = scanner.nextInt();
+
+			sendMessage(message);
+		}
+	}
+
+	public static void main(String[] args) {
+		String serverAddress = "localhost";
+		int serverPort = 54321;
+
+		IntClient client = new IntClient(serverAddress, serverPort);
+		client.start();
+	}
+}

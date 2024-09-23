@@ -1,0 +1,22 @@
+package defaultPackage;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class Vibration {
+	JFrame frame;
+	JButton btn;
+	private Vibration() {
+		frame = new JFrame("Vibration");
+		buildGUI();
+		frame.setSize(200,200);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+	private void buildGUI() {
+		btn = new JButton("진동시작");
+		frame.add(btn);
+		
+		btn.addActionListener(handler);
+	}
+}
