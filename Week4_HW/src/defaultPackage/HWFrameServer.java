@@ -78,6 +78,8 @@ public class HWFrameServer {
 	}
 	private void printDisplay(String msg) {
 		textarea.append(msg+"\n");
+		//커서를 textArea의 가장 끝으로 보내는 코드
+		textarea.setCaretPosition(textarea.getDocument().getLength());
 	}
 	private void receiveMessages(Socket clientSocket) {
 		InputStream in;

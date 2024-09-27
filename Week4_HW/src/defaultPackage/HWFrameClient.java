@@ -67,12 +67,13 @@ public class HWFrameClient {
 
 	private JPanel createInputPanel() {
 		text = new JTextField(20);
+		text.setEnabled(false);
 		text.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				sendMessage();
 			}
 			
 		});
@@ -104,6 +105,7 @@ public class HWFrameClient {
 				b_connect.setEnabled(false);
 				b_disconnect.setEnabled(true);
 				b_send.setEnabled(true);
+				text.setEnabled(true);
 			}
 			
 		});
@@ -118,6 +120,7 @@ public class HWFrameClient {
 				b_connect.setEnabled(true);
 				b_disconnect.setEnabled(false);
 				b_send.setEnabled(false);
+				text.setEnabled(false);
 			}
 			
 		});
