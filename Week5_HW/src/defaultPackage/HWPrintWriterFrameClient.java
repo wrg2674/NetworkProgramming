@@ -4,8 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.JButton;
@@ -16,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class HWFrameClient {
+public class HWPrintWriterFrameClient {
 	private JFrame frame;
 	private JTextField text;
 	private JTextArea textArea;
@@ -28,10 +31,10 @@ public class HWFrameClient {
 	private String serverAddress;
 	private int serverPort;
 	private Socket clientSocket;
-	private OutputStream out;
+	private PrintWriter out;
 	
-	public HWFrameClient() {
-		frame = new JFrame("Frame");
+	public HWPrintWriterFrameClient() {
+		frame = new JFrame("PrintWriterClientFrame");
 		
 		buildGUI();
 		frame.setBounds(100, 200, 200, 300);
@@ -142,7 +145,7 @@ public class HWFrameClient {
 	private void connectToServer() {
 		try {
 			clientSocket = new Socket(serverAddress, serverPort);
-			out = clientSocket.getOutputStream();
+			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8")), true);
 			
 		}catch(IOException e) {
 			System.err.println("소켓 생성 실패");
@@ -160,13 +163,10 @@ public class HWFrameClient {
 	}
 	private void sendMessage() {
 		try {
-			int str = Integer.parseInt(text.getText());
-			out.write(str);
+			String str = text.getText();
+			out.println(str);
 			textArea.append("나: "+str+"\n");
 			text.setText("");
-		}catch(IOException e) {
-			System.err.println("데이터 쓰기 실패");
-			System.exit(-1);
 		}catch(NumberFormatException e) {
 			System.err.println("정수 변환 실패");
 			System.exit(-1);

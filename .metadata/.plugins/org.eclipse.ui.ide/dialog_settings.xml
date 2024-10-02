@@ -6,6 +6,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="D:\NetworkProgramming\NetworkProgramming"/>
 			<item value="C:\Users\정구현\Desktop\NetworkProgramming\NetworkProgramming"/>
 			<item value="C:\Users\정구현\Desktop\네트워크프로그래밍\Week3_HW"/>
 		</list>

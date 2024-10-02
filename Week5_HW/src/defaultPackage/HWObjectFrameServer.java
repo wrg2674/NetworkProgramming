@@ -3,8 +3,9 @@ package defaultPackage;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,14 +14,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class HWFrameServer {
+public class HWObjectFrameServer {
 	JFrame frame;
 	JTextArea textarea;
 	JButton btn;
 	int port;
 	ServerSocket serverSocket;
-	public HWFrameServer() {
-		frame = new JFrame("Frame");
+	public HWObjectFrameServer() {
+		frame = new JFrame("ObjectFrameServer");
 
 		buildGUI();
 		frame.setBounds(100, 200, 200, 300);
@@ -69,7 +70,8 @@ public class HWFrameServer {
 			while(true) {
 				clientSocket = serverSocket.accept();
 				textarea.append("클라이언트가 연결되었습니다.\n");
-				receiveMessages(clientSocket);
+				ClientHandler cHandler = new ClientHandler(clientSocket);
+				cHandler.start();
 			}
 		}catch(IOException e) {
 			System.err.println("서버 접속 오류");
@@ -82,18 +84,36 @@ public class HWFrameServer {
 		textarea.setCaretPosition(textarea.getDocument().getLength());
 	}
 	private void receiveMessages(Socket clientSocket) {
-		InputStream in;
+		ObjectInputStream in;
 		try {
-			in=clientSocket.getInputStream();
-			int msg;
-			while((msg = in.read())!=-1) {
-				String message = "클라이언트 메세지: "+msg;
-				printDisplay(message);
+			in=new ObjectInputStream(clientSocket.getInputStream());
+			Object msg;
+			while(true) {
+				try {
+					msg = in.readObject();
+					String message = "클라이언트 메세지: "+msg.toString();
+					printDisplay(message);
+				}catch(ClassNotFoundException e) {
+					System.err.println("데이터 읽기 실패");
+					System.exit(-1);
+				}
+				
 			}
 		}catch(IOException e) {
 			System.err.println("인풋 스트림 생성 오류");
 			System.exit(-1);
 		}
+	}
+	private class ClientHandler extends Thread{
+		private Socket clientSocket;
+		public ClientHandler(Socket clientSocket) {
+			this.clientSocket = clientSocket;
+		}
+		@Override
+		public void run() {
+			receiveMessages(clientSocket);
+		}
+		
 	}
 
 }
