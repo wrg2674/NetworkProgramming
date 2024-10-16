@@ -25,6 +25,7 @@
 		<item key="WizardProjectsImportPage.STORE_CLOSE_CREATED_PROJECTS_ID" value="false"/>
 		<item key="WizardProjectsImportPage.STORE_HIDE_CONFLICTING_PROJECTS_ID" value="false"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="D:\NetworkProgramming\NetworkProgramming"/>
 			<item value="C:\Users\정구현\Desktop\NetworkProgramming\NetworkProgramming"/>
 			<item value="C:\Users\정구현\Desktop\네트워크프로그래밍"/>
 		</list>
