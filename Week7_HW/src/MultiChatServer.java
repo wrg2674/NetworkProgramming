@@ -1,4 +1,4 @@
-
+ 
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,9 +23,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
-public class P2PChatServer {
+public class MultiChatServer {
 	private JFrame frame;
 	private JTextArea textArea;
 	private JLabel label;
@@ -34,8 +36,9 @@ public class P2PChatServer {
 	
 	//private Reader in;
 	private Thread acceptThread = null;
+	private Vector<ClientHandler> users =new Vector<ClientHandler>();
 	
-	public P2PChatServer() {
+	public MultiChatServer() {
 		frame = new JFrame("P2P ChatServer");
 		port=54321;
 		buildGUI();
@@ -61,7 +64,7 @@ public class P2PChatServer {
 		return panel;
 	}
 	private JPanel createSouthPanel() {
-		JPanel panel = new JPanel(new GridLayout(2,1));
+		JPanel panel = new JPanel(new GridLayout(0,1));
 		panel.add(createControlPanel());
 		return panel;
 		
@@ -123,13 +126,21 @@ public class P2PChatServer {
 	}
 	private void startServer() {
 		Socket clientSocket = null;
-		printDisplay("서버가 시작되었습니다.");
+		InetAddress localHost=null;
+		try {
+			localHost = InetAddress.getLocalHost();
+		}catch(UnknownHostException e) {
+			
+		}
+		
+		printDisplay("서버가 시작되었습니다."+localHost.getHostAddress());
 		try {
 			serverSocket = new ServerSocket(port);
 			while(acceptThread == Thread.currentThread()) {
 				clientSocket = serverSocket.accept();
-				textArea.append("클라이언트가 연결되었습니다.\n");
+				//textArea.append("클라이언트가 연결되었습니다.\n");
 				ClientHandler cHandler = new ClientHandler(clientSocket);
+				users.add(cHandler);
 				cHandler.start();
 			}
 			
@@ -170,7 +181,7 @@ public class P2PChatServer {
 		}
 	}
 	private class ClientHandler extends Thread{
-		private Writer out;
+		private BufferedWriter out;
 		private Socket clientSocket;
 		private String uid;
 		
@@ -189,13 +200,19 @@ public class P2PChatServer {
 				out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
 				String msg;
 				while((msg = in.readLine()) != null) {
-					if(msg.contains("/uid")) {
-						uid = msg.
-						printDisplay("새 참가자: " +uid);
+					if(msg.contains("/uid: ")) {
+						String user = msg.substring(6);
+						uid = user;
+						printDisplay("새 참가자: " +user);
 					}
-					printDisplay(message);
+					else {
+						broadcasting(uid+" : "+msg);
+					}
+					
 				}
 				printDisplay("클라이언트가 연결을 종료했습니다.");
+				users.remove(this);
+				out.close();
 			}catch(IOException e) {
 				System.err.println("인풋 스트림 생성 오류");
 				System.exit(-1);
@@ -208,12 +225,12 @@ public class P2PChatServer {
 				System.exit(-1);
 			}
 		}
-		private void sendMessage() {
+		private void sendMessage(String msg) {
 			try {
 				
-				out.write(str+"\n");
+				out.write(msg+"\n");
 				out.flush();
-				textArea.append(": "+str+"\n");
+				//textArea.append(": "+str+"\n");
 				
 			}catch(IOException e) {
 				System.err.println("데이터 쓰기 실패");
@@ -223,9 +240,14 @@ public class P2PChatServer {
 				System.exit(-1);
 			}
 		}
+		private void broadcasting(String msg) {
+			for(int i=0; i < users.size(); i++) {
+				users.elementAt(i).sendMessage(msg);
+			}
+		}
 	}
 	public static void main(String args[]) {
-		new P2PChatServer();
+		new MultiChatServer();
 	}
 
 }

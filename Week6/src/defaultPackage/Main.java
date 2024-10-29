@@ -14,8 +14,8 @@ public class Main {
 		//new HWPrintWriterFrameServer();
 		//new HWObjectFrameClient();
 		//new HWObjectFrameServer();
-		new HWEchoFrameClient();
-		new HWEchoFrameServer();
+		//new HWEchoFrameClient();
+		//new HWEchoFrameServer();
 	}
 
 }

@@ -1,6 +1,7 @@
 
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class P2PFreeTalk {
+public class MultiTalk {
 	private JFrame frame;
 	private JTextField text;
 	private JTextArea textArea;
@@ -43,22 +44,22 @@ public class P2PFreeTalk {
 	private Reader in;
 	private Thread receiveThread =null;
 	
-	public P2PFreeTalk(String serverAddress, int serverPort) {
-		frame = new JFrame("P2P Free  Talk");
-		
+	public MultiTalk(String serverAddress, int serverPort) {
+		frame = new JFrame("Multi Talk");
+		this.serverPort = serverPort;
+		this.serverAddress = serverAddress;
 		buildGUI();
-		frame.setBounds(100, 200, 200, 300);
+		frame.setBounds(100, 200, 500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
-		this.serverPort = serverPort;
-		this.serverAddress = serverAddress;
+		
+		
 	}
 
 	private void buildGUI() {
 		frame.setLayout(new BorderLayout());
 		frame.add(createDisplayPanel());
-		frame.add(createInfoPanel());
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
 
 	}
@@ -74,15 +75,15 @@ public class P2PFreeTalk {
 		String addr = local.getHostAddress();
 		String[] part = addr.split("\\.");
 		
-		JPanel panel = new JPanel(new BorderLayout());
+		JPanel panel = new JPanel(new FlowLayout());
 		JLabel l_userID = new JLabel("아이디: ");
-		t_userID = new JTextField();
+		t_userID = new JTextField(8);
 		t_userID.setText("guest"+part[3]);
 		JLabel l_serverAddress = new JLabel("서버주소: ");
-		t_serverAddress = new JTextField();
+		t_serverAddress = new JTextField(10);
 		t_serverAddress.setText(serverAddress);
 		JLabel l_portNumber = new JLabel("포트번호: ");
-		t_portNumber = new JTextField();
+		t_portNumber = new JTextField(5);
 		t_portNumber.setText(""+serverPort);
 		
 		panel.add(l_userID);
@@ -104,8 +105,9 @@ public class P2PFreeTalk {
 		return panel;
 	}
 	private JPanel createSouthPanel() {
-		JPanel panel = new JPanel(new GridLayout(2,1));
+		JPanel panel = new JPanel(new GridLayout(3,1));
 		panel.add(createInputPanel());
+		panel.add(createInfoPanel());
 		panel.add(createControlPanel());
 		return panel;
 		
@@ -141,7 +143,6 @@ public class P2PFreeTalk {
 		panel.add(b_send, BorderLayout.EAST);
 		return panel;
 	}
-
 	private JPanel createControlPanel() {
 		JPanel panel = new JPanel(new GridLayout(1, 3));
 		b_connect = new JButton("접속하기");
@@ -151,13 +152,13 @@ public class P2PFreeTalk {
 				// TODO Auto-generated method stub
 				serverAddress = t_serverAddress.getText();
 				serverPort=Integer.parseInt(t_portNumber.getText());
-				
-				connectToServer();
-				sendUserID();
 				b_connect.setEnabled(false);
 				b_disconnect.setEnabled(true);
 				b_send.setEnabled(true);
 				text.setEnabled(true);
+				connectToServer();
+				
+				
 			}
 			
 		});
@@ -194,6 +195,7 @@ public class P2PFreeTalk {
 	private void sendUserID() {
 		try {
 			out.write("/uid: "+t_userID.getText()+"\n");
+			out.flush();
 		}
 		catch(IOException e) {
 			System.err.println("유저 아이디 전송 실패");
@@ -206,7 +208,7 @@ public class P2PFreeTalk {
 			clientSocket.connect(sa, 3000);
 			out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
-
+			sendUserID();
 			receiveThread = new Thread(new Runnable() {
 
 				@Override
@@ -242,8 +244,8 @@ public class P2PFreeTalk {
 			String str = text.getText();
 			out.write(str+"\n");
 			out.flush();
-			String myMsg = ((BufferedReader)in).readLine();
-			textArea.append(myMsg);
+			//String myMsg = ((BufferedReader)in).readLine();
+			//textArea.append(myMsg);
 			text.setText("");
 		}catch(IOException e) {
 			System.err.println("데이터 쓰기 실패");
@@ -275,6 +277,6 @@ public class P2PFreeTalk {
 	public static void main(String[] args) {
 		String serverAddress = "localhost";
 		int serverPort=54321;
-		new P2PFreeTalk(serverAddress, serverPort);
+		new MultiTalk(serverAddress, serverPort);
 	}
 }
