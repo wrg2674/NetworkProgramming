@@ -110,6 +110,10 @@
 		<item key="JarManifestWizardPage.MANIFEST_LOCATION" value=""/>
 		<item key="JarManifestWizardPage.SEAL_JAR" value="false"/>
 		<list key="JarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="Week10_HW_Server/WithTalk_Client.jar"/>
+			<item value="Week10_HW_Server/WithTalk_Server.jar"/>
+			<item value="Week10_HW_Client/WithTalk_Client.jar"/>
+			<item value="Week10_HW_Server/WithTalk_Sever.jar"/>
 			<item value="C:\Users\정구현\Desktop\NetworkProgramming\NetworkProgramming\CalcServerGUI.jar"/>
 			<item value="C:\Users\정구현\Desktop\NetworkProgramming\NetworkProgramming\CalcClientGUI.jar"/>
 			<item value="C:\Users\정구현\Desktop\NetworkProgramming\NetworkProgramming\과제\CalcClientGUI.jar"/>
